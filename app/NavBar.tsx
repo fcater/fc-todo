@@ -31,8 +31,8 @@ const NavLinks = () => {
   const currentPath = usePathname();
 
   const links = [
-    { label: "Dashboard", href: "/" },
-    { label: "Todos", href: "/todos/list" },
+    { label: "主页", href: "/" },
+    { label: "待办事项", href: "/todos/list" },
   ];
 
   return (

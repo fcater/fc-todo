@@ -1,7 +1,23 @@
-import React from "react";
+import { Metadata } from "next";
+import { Flex } from "@radix-ui/themes";
 
-function TodosPage() {
-  return <div>Todos Page</div>;
-}
+import TodoTable from "./TodoTable";
+import TodoActions from "./TodoActions";
+
+const TodosPage = () => {
+  return (
+    <Flex direction="column" gap="3">
+      <TodoActions />
+      <TodoTable />
+    </Flex>
+  );
+};
+
+export const dynamic = "force-dynamic";
+
+export const metadata: Metadata = {
+  title: "FC Todo - Todo List",
+  description: "View all Todos",
+};
 
 export default TodosPage;
