@@ -4,6 +4,7 @@ CREATE TABLE `Todo` (
     `title` VARCHAR(255) NOT NULL,
     `description` TEXT NOT NULL,
     `priority` ENUM('LOW', 'MEDIUM', 'HIGH') NOT NULL DEFAULT 'MEDIUM',
+    `hasDone` BOOLEAN NOT NULL DEFAULT false,
     `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `updatedAt` DATETIME(3) NOT NULL,
 

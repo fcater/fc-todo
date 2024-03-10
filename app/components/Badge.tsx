@@ -5,9 +5,9 @@ import { Priority } from "@prisma/client";
 type Color = "red" | "violet" | "green";
 
 const priorityMap: Record<Priority, { label: string; color: "red" | "violet" | "green" }> = {
-  HIGH: { label: "高优先", color: "red" },
-  MEDIUM: { label: "中优先", color: "violet" },
-  LOW: { label: "低优先", color: "green" },
+  HIGH: { label: "高优先级", color: "red" },
+  MEDIUM: { label: "中优先级", color: "violet" },
+  LOW: { label: "低优先级", color: "green" },
 };
 
 const Badge = ({ label, color }: { label: string; color: Color }) => {

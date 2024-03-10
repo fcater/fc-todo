@@ -3,10 +3,10 @@
 import { z } from "zod";
 import axios from "axios";
 import { useState } from "react";
-import { Todo } from "@prisma/client";
+import { Priority, Todo } from "@prisma/client";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Button, Callout, TextField } from "@radix-ui/themes";
+import { Button, Callout, Select, TextField } from "@radix-ui/themes";
 import { useRouter } from "next/navigation";
 
 import Message, { MESSAGE_STATUS } from "@/app/components/Message";
@@ -18,6 +18,12 @@ import "easymde/dist/easymde.min.css";
 
 type FormData = z.infer<typeof todoSchema>;
 
+const priorityMap: Record<Priority, string> = {
+  HIGH: "高优先级",
+  MEDIUM: "中优先级",
+  LOW: "低优先级",
+};
+
 const TodoForm = ({ todo }: { todo?: Todo }) => {
   const router = useRouter();
   const [error, setError] = useState("");
@@ -27,9 +33,7 @@ const TodoForm = ({ todo }: { todo?: Todo }) => {
     control,
     handleSubmit,
     formState: { errors },
-  } = useForm<FormData>({
-    resolver: zodResolver(todoSchema),
-  });
+  } = useForm<FormData>({ resolver: zodResolver(todoSchema) });
 
   const onSubmit = handleSubmit(async (data) => {
     try {
@@ -52,6 +56,23 @@ const TodoForm = ({ todo }: { todo?: Todo }) => {
         </Callout.Root>
       )}
       <form className="space-y-3" onSubmit={onSubmit}>
+        <Controller
+          control={control}
+          name="priority"
+          defaultValue={Priority.MEDIUM}
+          render={({ field }) => (
+            <Select.Root onValueChange={field.onChange} defaultValue={field.value}>
+              <Select.Trigger />
+              <Select.Content>
+                {Object.values(Priority).map((_) => (
+                  <Select.Item key={_} value={_}>
+                    {priorityMap[_]}
+                  </Select.Item>
+                ))}
+              </Select.Content>
+            </Select.Root>
+          )}
+        />
         <TextField.Root>
           <TextField.Input defaultValue={todo?.title} placeholder="标题" {...register("title")} />
         </TextField.Root>
@@ -63,7 +84,7 @@ const TodoForm = ({ todo }: { todo?: Todo }) => {
           render={({ field }) => <SimpleMDE placeholder="详细描述" {...field} />}
         />
         <Message status={MESSAGE_STATUS.error}>{errors.description?.message}</Message>
-        <Button disabled={isSubmitting}>
+        <Button className="cursor-pointer" disabled={isSubmitting}>
           {todo ? "更 新" : "创 建"} {isSubmitting && <Spinner />}
         </Button>
       </form>

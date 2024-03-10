@@ -1,24 +1,13 @@
-"use client";
-
-import axios from "axios";
-import React, { useEffect, useState } from "react";
+import React from "react";
 import Link from "next/link";
 import NextLink from "next/link";
-import { Todo } from "@prisma/client";
 import { Table } from "@radix-ui/themes";
 import { Badge } from "@/app/components";
+import type { Todo } from "@prisma/client";
+import todoAPIs from "@/prisma/api/todos";
 
-const TodoTable = () => {
-  const [todos, setTodos] = useState<Todo[]>([]);
-
-  useEffect(() => {
-    const getTodos = async () => {
-      const { data: todos } = await axios.get("/api/todos");
-      setTodos(todos);
-    };
-    getTodos();
-  }, []);
-
+const TodoTable = async () => {
+  const todos = await todoAPIs.list();
   return (
     <Table.Root variant="surface">
       <Table.Header>
@@ -31,7 +20,7 @@ const TodoTable = () => {
         </Table.Row>
       </Table.Header>
       <Table.Body>
-        {todos.map((todo) => (
+        {todos?.map((todo) => (
           <Table.Row key={todo.id}>
             <Table.Cell>
               <Link href={`/todos/${todo.id}`}>{todo.title}</Link>
@@ -42,7 +31,7 @@ const TodoTable = () => {
             <Table.Cell className="hidden md:table-cell">
               <Badge.Priority priority={todo.priority} />
             </Table.Cell>
-            <Table.Cell className="hidden md:table-cell">{todo.createdAt.toString()}</Table.Cell>
+            <Table.Cell className="hidden md:table-cell">{todo.createdAt.toDateString()}</Table.Cell>
           </Table.Row>
         ))}
       </Table.Body>
