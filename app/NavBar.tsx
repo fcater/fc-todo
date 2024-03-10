@@ -6,6 +6,7 @@ import Link from "next/link";
 import { AiFillFlag } from "react-icons/ai";
 import { usePathname } from "next/navigation";
 import { Container, Flex } from "@radix-ui/themes";
+import AuthStatus from "./components/AuthStatus";
 
 const NavBar = () => {
   return (
@@ -21,6 +22,7 @@ const NavBar = () => {
             </Link>
             <NavLinks />
           </Flex>
+          <AuthStatus />
         </Flex>
       </Container>
     </nav>
