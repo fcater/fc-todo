@@ -4,10 +4,9 @@ import NextLink from "next/link";
 import { Table } from "@radix-ui/themes";
 import { Badge } from "@/app/components";
 import type { Todo } from "@prisma/client";
-import todoAPIs from "@/prisma/api/todos";
+import CheckTodo from "./CheckTodo";
 
-const TodoTable = async () => {
-  const todos = await todoAPIs.list();
+const TodoTable = async ({ todos }: { todos: Todo[] }) => {
   return (
     <Table.Root variant="surface">
       <Table.Header>
@@ -24,7 +23,7 @@ const TodoTable = async () => {
           <Table.Row key={todo.id}>
             <Table.Cell>
               <Link href={`/todos/${todo.id}`}>{todo.title}</Link>
-              <div className="block md:hidden">
+              <div className="inline md:hidden ml-3">
                 <Badge.Priority priority={todo.priority} />
               </div>
             </Table.Cell>
@@ -32,6 +31,8 @@ const TodoTable = async () => {
               <Badge.Priority priority={todo.priority} />
             </Table.Cell>
             <Table.Cell className="hidden md:table-cell">{todo.createdAt.toDateString()}</Table.Cell>
+            <Table.Cell className="hidden md:table-cell">{todo.hasDone ? "已完成" : "未完成"}</Table.Cell>
+            <CheckTodo todo={todo} />
           </Table.Row>
         ))}
       </Table.Body>
@@ -54,6 +55,15 @@ const columns: {
     label: "创建时间",
     value: "createdAt",
     className: "hidden md:table-cell",
+  },
+  {
+    label: "状态",
+    value: "hasDone",
+    className: "hidden md:table-cell",
+  },
+  {
+    label: " ",
+    value: "hasDone",
   },
 ];
 

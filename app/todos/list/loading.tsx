@@ -1,12 +1,12 @@
 import { Skeleton } from "@/app/components";
-import { Table } from "@radix-ui/themes";
+import { Flex, Table } from "@radix-ui/themes";
 import TodoActions from "./TodoActions";
 
 const LoadingTodosPage = () => {
   const todos = [1, 2, 3, 4, 5];
 
   return (
-    <div>
+    <Flex direction="column" gap="3">
       <TodoActions />
       <Table.Root variant="surface">
         <Table.Header>
@@ -14,6 +14,7 @@ const LoadingTodosPage = () => {
             <Table.ColumnHeaderCell>标题</Table.ColumnHeaderCell>
             <Table.ColumnHeaderCell className="hidden md:table-cell">优先级</Table.ColumnHeaderCell>
             <Table.ColumnHeaderCell className="hidden md:table-cell">创建时间</Table.ColumnHeaderCell>
+            <Table.ColumnHeaderCell className="hidden md:table-cell">状态</Table.ColumnHeaderCell>
           </Table.Row>
         </Table.Header>
         <Table.Body>
@@ -31,11 +32,14 @@ const LoadingTodosPage = () => {
               <Table.Cell className="hidden md:table-cell">
                 <Skeleton />
               </Table.Cell>
+              <Table.Cell className="hidden md:table-cell">
+                <Skeleton />
+              </Table.Cell>
             </Table.Row>
           ))}
         </Table.Body>
       </Table.Root>
-    </div>
+    </Flex>
   );
 };
 

@@ -53,8 +53,8 @@ const DeleteTodoButton = ({ todoId }: { todoId: number }) => {
       </AlertDialog.Root>
       <AlertDialog.Root open={error}>
         <AlertDialog.Content>
-          <AlertDialog.Title>Error</AlertDialog.Title>
-          <AlertDialog.Description>这条待办已经被删除了</AlertDialog.Description>
+          <AlertDialog.Title>错误</AlertDialog.Title>
+          <AlertDialog.Description>删除失败！</AlertDialog.Description>
           <Button color="gray" variant="soft" mt="2" onClick={() => setError(false)}>
             确定
           </Button>

@@ -1,17 +1,17 @@
 import { Metadata } from "next";
 import { Flex } from "@radix-ui/themes";
 
-import TodoActions from "./TodoActions";
 import todoAPIs from "@/prisma/api/todos";
-import TodoTable from "./TodoTable";
+import TodoTable from "../list/TodoTable";
+import TodoActions from "../list/TodoActions";
 
-const TodosPage = async () => {
+const DoneTodosPage = async () => {
   const todos = await todoAPIs.list();
 
   return (
     <Flex direction="column" gap="3">
       <TodoActions />
-      <TodoTable todos={todos.filter((todo) => !todo.hasDone)} />
+      <TodoTable todos={todos.filter((todo) => todo.hasDone)} />
     </Flex>
   );
 };
@@ -19,8 +19,8 @@ const TodosPage = async () => {
 export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
-  title: "FC Todo - Todo List",
-  description: "View all Todos",
+  title: "FC Todo - Done Todo List",
+  description: "View all done todos",
 };
 
-export default TodosPage;
+export default DoneTodosPage;

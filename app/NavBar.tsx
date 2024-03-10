@@ -33,6 +33,7 @@ const NavLinks = () => {
   const links = [
     { label: "主页", href: "/" },
     { label: "待办事项", href: "/todos/list" },
+    { label: "已完成", href: "/todos/done" },
   ];
 
   return (
