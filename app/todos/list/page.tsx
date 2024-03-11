@@ -2,16 +2,19 @@ import { Metadata } from "next";
 import { Flex } from "@radix-ui/themes";
 
 import TodoActions from "./TodoActions";
-import todoAPIs from "@/prisma/api/todos";
 import TodoTable from "./TodoTable";
 
-const TodosPage = async () => {
-  const todos = await todoAPIs.list();
+type TodosPageProps = {
+  searchParams: {
+    hasDone: String;
+  };
+};
 
+const TodosPage = ({ searchParams }: TodosPageProps) => {
   return (
     <Flex direction="column" gap="3">
       <TodoActions />
-      <TodoTable todos={todos.filter((todo) => !todo.hasDone)} />
+      <TodoTable searchParams={searchParams} />
     </Flex>
   );
 };

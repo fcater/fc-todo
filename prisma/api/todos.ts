@@ -6,7 +6,7 @@ const fetchTodo = cache((todoId: number) => {
   return prisma.todo.findUnique({ where: { id: todoId } });
 });
 
-const fetchTodos = cache(() => prisma.todo.findMany());
+const fetchTodos = cache(() => prisma.todo.findMany({ include: { createdByUser: true } }));
 
 const todoAPIs = {
   get: fetchTodo,

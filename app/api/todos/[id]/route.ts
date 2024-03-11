@@ -1,8 +1,12 @@
 import prisma from "@/prisma/client";
+import { getServerSession } from "next-auth";
 import { patchTodoSchema } from "@/app/todos/validationSchemas";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function PATCH(request: NextRequest, { params }: { params: { id: string } }) {
+  const session = await getServerSession();
+  if (!session) return NextResponse.json({}, { status: 401 });
+
   const body = await request.json();
   const validation = patchTodoSchema.safeParse(body);
   if (!validation.success) return NextResponse.json(validation.error.format(), { status: 400 });
@@ -20,6 +24,9 @@ export async function PATCH(request: NextRequest, { params }: { params: { id: st
 }
 
 export async function DELETE(request: NextRequest, { params }: { params: { id: string } }) {
+  const session = await getServerSession();
+  if (!session) return NextResponse.json({}, { status: 401 });
+
   const todo = await prisma.todo.findUnique({ where: { id: parseInt(params.id) } });
   if (!todo) return NextResponse.json({ error: "Invalid Todo" }, { status: 404 });
 

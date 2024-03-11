@@ -3,6 +3,7 @@
 import { z } from "zod";
 import axios from "axios";
 import { useState } from "react";
+import { useSession } from "next-auth/react";
 import { Priority, Todo } from "@prisma/client";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -26,6 +27,7 @@ const priorityMap: Record<Priority, string> = {
 
 const TodoForm = ({ todo }: { todo?: Todo }) => {
   const router = useRouter();
+  const session = useSession(); 
   const [error, setError] = useState("");
   const [isSubmitting, setSubmitting] = useState(false);
   const {
@@ -39,7 +41,7 @@ const TodoForm = ({ todo }: { todo?: Todo }) => {
     try {
       setSubmitting(true);
       if (todo) await axios.patch("/api/todos/" + todo.id, data);
-      else await axios.post("/api/todos", data);
+      else await axios.post("/api/todos", { ...data, createdByUserId: session?.data?.user?.id });
       router.push("/todos/list");
       router.refresh();
     } catch (error) {

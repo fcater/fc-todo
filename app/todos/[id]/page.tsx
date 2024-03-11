@@ -1,7 +1,9 @@
- import { Box, Flex, Grid } from "@radix-ui/themes";
-import { notFound } from "next/navigation";
-import TodoDetails from "./TodoDetails";
 import todoAPIs from "@/prisma/api/todos";
+import { notFound } from "next/navigation";
+import { getServerSession } from "next-auth";
+import { Box, Flex, Grid } from "@radix-ui/themes";
+
+import TodoDetails from "./TodoDetails";
 import EditTodoButton from "./EditTodoButton";
 import DeleteTodoButton from "./DeleteTodoButton";
 
@@ -10,15 +12,17 @@ interface Props {
 }
 
 const TodoDetailPage = async ({ params }: Props) => {
-  const todo = await todoAPIs.get(Number.parseInt(params.id))
+  const todo = await todoAPIs.get(Number.parseInt(params.id));
   if (!todo) notFound();
+
+  const session = await getServerSession();
 
   return (
     <Grid columns={{ initial: "1", sm: "5" }} gap="5">
       <Box className="md:col-span-4">
         <TodoDetails todo={todo} />
       </Box>
-      {(
+      {session && (
         <Box>
           <Flex direction="column" gap="4">
             <EditTodoButton todoId={todo.id} />

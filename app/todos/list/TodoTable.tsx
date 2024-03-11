@@ -1,12 +1,38 @@
 import React from "react";
 import Link from "next/link";
 import NextLink from "next/link";
-import { Table } from "@radix-ui/themes";
 import { Badge } from "@/app/components";
+import todoAPIs from "@/prisma/api/todos";
 import type { Todo } from "@prisma/client";
+import { getServerSession } from "next-auth";
+import { Avatar, Table } from "@radix-ui/themes";
+
 import CheckTodo from "./CheckTodo";
 
-const TodoTable = async ({ todos }: { todos: Todo[] }) => {
+type TodoTableProps = {
+  searchParams: {
+    hasDone: String;
+  };
+};
+
+const TodoTable = async ({ searchParams }: TodoTableProps) => {
+  const session = await getServerSession();
+  let todos;
+  const _todos = await todoAPIs.list();
+  if (searchParams.hasDone) {
+    const allTodos = _todos.reduce<{ done: typeof _todos; notDone: typeof _todos }>(
+      (total, cur) => {
+        if (cur.hasDone) total.done.push(cur);
+        else total.notDone.push(cur);
+        return total;
+      },
+      { done: [], notDone: [] }
+    );
+
+    todos = searchParams.hasDone === "true" ? allTodos.done : allTodos.notDone;
+  } else todos = _todos;
+
+  console.log(todos);
   return (
     <Table.Root variant="surface">
       <Table.Header>
@@ -22,7 +48,19 @@ const TodoTable = async ({ todos }: { todos: Todo[] }) => {
         {todos?.map((todo) => (
           <Table.Row key={todo.id}>
             <Table.Cell>
-              <Link href={`/todos/${todo.id}`}>{todo.title}</Link>
+              <Link href={`/todos/${todo.id}`}>
+                {todo.createdByUser?.image && session && (
+                  <Avatar
+                    src={todo.createdByUser?.image}
+                    fallback="?"
+                    size="1"
+                    radius="full"
+                    className="mr-2"
+                    referrerPolicy="no-referrer"
+                  />
+                )}
+                {todo.title}
+              </Link>
               <div className="inline md:hidden ml-3">
                 <Badge.Priority priority={todo.priority} />
               </div>

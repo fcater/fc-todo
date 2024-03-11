@@ -16,6 +16,9 @@ const authOptions: NextAuthOptions = {
       clientSecret: process.env.GITHUB_CLIENT_SECRET!,
     }),
   ],
+  callbacks: {
+    session: ({ session, token }) => ({ ...session, user: { ...session.user, id: token.sub } }),
+  },
   session: {
     strategy: "jwt",
   },
