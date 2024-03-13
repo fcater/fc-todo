@@ -32,7 +32,6 @@ const TodoTable = async ({ searchParams }: TodoTableProps) => {
     todos = searchParams.hasDone === "true" ? allTodos.done : allTodos.notDone;
   } else todos = _todos;
 
-  console.log(todos);
   return (
     <Table.Root variant="surface">
       <Table.Header>

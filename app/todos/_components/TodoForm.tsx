@@ -27,7 +27,7 @@ const priorityMap: Record<Priority, string> = {
 
 const TodoForm = ({ todo }: { todo?: Todo }) => {
   const router = useRouter();
-  const session = useSession(); 
+  const session = useSession();
   const [error, setError] = useState("");
   const [isSubmitting, setSubmitting] = useState(false);
   const {
@@ -41,6 +41,7 @@ const TodoForm = ({ todo }: { todo?: Todo }) => {
     try {
       setSubmitting(true);
       if (todo) await axios.patch("/api/todos/" + todo.id, data);
+      // @ts-ignore
       else await axios.post("/api/todos", { ...data, createdByUserId: session?.data?.user?.id });
       router.push("/todos/list");
       router.refresh();

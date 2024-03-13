@@ -21,7 +21,7 @@ const LatestTodos = async () => {
       </Heading>
       <Table.Root>
         <Table.Body>
-          {todos.map((todo) => (
+          {todos.map((todo: any) => (
             <Table.Row key={todo.id}>
               <Table.Cell>
                 <Flex justify="between">
